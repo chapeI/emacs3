@@ -18,7 +18,7 @@
 (use-package magit :config (setq magit-diff-refine-hunk (quote all))) ; show git difference to a word level
 (use-package vertico :config (vertico-mode 1))
 (use-package consult)
-(use-package popper :bind ("C-`" . popper-toggle-latest))
+(use-package popper :init (popper-mode) :bind ("C-`" . popper-toggle-latest))
 (use-package auto-dim-other-buffers :init (auto-dim-other-buffers-mode))
 (use-package evil :config (evil-mode 1))
 (use-package dashboard :config (dashboard-setup-startup-hook))
@@ -27,7 +27,9 @@
 (use-package org-roam
   :config
   (setq org-roam-directory "~/Dropbox/roam2/")
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag))) ; show filetags on org-roam-find-node
+  (setq org-roam-node-display-template
+	(concat "${title:*} "		; show filetags on org-roam-find-node
+		(propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-db-autosync-mode))
 (use-package orderless
   :ensure t
@@ -52,4 +54,4 @@
 ;; hooks
 (add-hook 'org-mode-hook 'org-indent-mode)
 
-;; keep init clean
+;; keep init clean delete anything that autogenerates below
