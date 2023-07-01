@@ -14,8 +14,8 @@
 (global-display-line-numbers-mode t) (menu-bar--display-line-numbers-mode-visual)
 (setq visible-bell 1)
 
-;; packages (stick to one line)
-(use-package magit :config (setq magit-diff-refine-hunk (quote all)))
+;; packages (stick to one line if possible)
+(use-package magit :config (setq magit-diff-refine-hunk (quote all))) ; show git difference to a word level
 (use-package vertico :config (vertico-mode 1))
 (use-package consult)
 (use-package popper :bind ("C-`" . popper-toggle-latest))
@@ -24,11 +24,11 @@
 (use-package dashboard :config (dashboard-setup-startup-hook))
 (use-package embark :bind ("M-o" . embark-act)) ; mx + mo
 (use-package embark-consult)
-(use-package org-roam :config (setq org-roam-directory "~/Dropbox/roam2/") (org-roam-db-autosync-mode))
-
-;; showing file tags when 'finding' node
-(setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-
+(use-package org-roam
+  :config
+  (setq org-roam-directory "~/Dropbox/roam2/")
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag))) ; show filetags on org-roam-find-node
+  (org-roam-db-autosync-mode))
 (use-package orderless
   :ensure t
   :custom
