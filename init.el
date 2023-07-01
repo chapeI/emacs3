@@ -24,12 +24,16 @@
 (use-package dashboard :config (dashboard-setup-startup-hook))
 (use-package embark :bind ("M-o" . embark-act)) ; mx + mo
 (use-package embark-consult)
-(use-package org-roam :config (setq org-roam-directory "~/Dropbox/roam2/"))
+(use-package org-roam :config (setq org-roam-directory "~/Dropbox/roam2/") (org-roam-db-autosync-mode))
+
+;; showing file tags when 'finding' node
+(setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+
 (use-package orderless
+  :ensure t
   :custom
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles . (partial-completion))))))
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
 (use-package corfu			; autocomplete
   :after orderless
   :custom
