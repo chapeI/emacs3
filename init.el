@@ -24,9 +24,11 @@
 (use-package dashboard :config (dashboard-setup-startup-hook))
 (use-package embark :bind ("M-o" . embark-act)) ; mx + mo
 (use-package embark-consult)
+(use-package org :config (setq org-hide-emphasis-markers t))
 (use-package org-roam
+  :custom
+  (org-roam-directory "~/Dropbox/roam2/")
   :config
-  (setq org-roam-directory "~/Dropbox/roam2/")
   (setq org-roam-node-display-template
 	(concat "${title:*} "		; show filetags on org-roam-find-node
 		(propertize "${tags:10}" 'face 'org-tag)))
