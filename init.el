@@ -1,18 +1,7 @@
-;; use-package (dont touch)
-(require 'package)
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))
-(package-initialize)
-(unless package-archive-contents (package-refresh-contents)) ; allows .emacs.d/ nuke
-(unless (package-installed-p 'use-package) (package-install 'use-package))
-(require 'use-package)
-(setq use-package-always-ensure t)
-
-;; visuals
 (setq-default echo-keystrokes 0.1)
 (global-display-line-numbers-mode t) (menu-bar--display-line-numbers-mode-visual)
 (setq visible-bell 1)
+(load-theme 'leuven)
 
 ;; packages (stick to one line if possible)
 (use-package magit :config (setq magit-diff-refine-hunk (quote all))) ; show git difference to a word level
@@ -56,5 +45,16 @@
 
 ;; hooks
 (add-hook 'org-mode-hook 'org-indent-mode)
+
+;; use-package (dont touch)
+(require 'package)
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")
+                         ("elpa" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
+(unless package-archive-contents (package-refresh-contents)) ; allows .emacs.d/ nuke
+(unless (package-installed-p 'use-package) (package-install 'use-package))
+(require 'use-package)
+(setq use-package-always-ensure t)
 
 ;; keep init clean delete anything that autogenerates below
