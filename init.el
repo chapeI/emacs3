@@ -25,6 +25,7 @@
 (use-package embark :bind ("M-o" . embark-act)) ; mx + mo
 (use-package embark-consult)
 (use-package org :config (setq org-hide-emphasis-markers t))
+(use-package emojify :hook (after-init . global-emojify-mode))
 (use-package org-roam
   :custom
   (org-roam-directory "~/Dropbox/roam2/")
