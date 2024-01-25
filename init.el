@@ -1,20 +1,29 @@
 (setq-default echo-keystrokes 0.1)
-(global-display-line-numbers-mode t) (menu-bar--display-line-numbers-mode-visual)
 (setq visible-bell 1)
-(load-theme 'leuven)
+(load-theme 'tsdh-light)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+
+
+;; numbered lines
+(global-display-line-numbers-mode t) (menu-bar--display-line-numbers-mode-visual)
+
+;; global truncating lines
+(set-default 'truncate-lines t)
+(setq truncate-partial-width-windows nil)
 
 ;; packages (stick to one line if possible)
-(use-package magit :config (setq magit-diff-refine-hunk (quote all))) ; show git difference to a word level
-(use-package vertico :config (vertico-mode 1))
+(use-package magit :config (setq magit-diff-refine-hunk (quote all)) (global-git-gutter-mode 1)) ; show git difference to a word level
+(use-package vertico :config (vertico-mode 1) (vertico-reverse-mode 1) (vertico-grid-mode 1))
 (use-package consult)
 (use-package popper :init (popper-mode) :bind ("C-`" . popper-toggle-latest))
 (use-package auto-dim-other-buffers :init (auto-dim-other-buffers-mode))
-(use-package evil :config (evil-mode 1))
+(use-package evil :config (evil-mode 1) (evil-surround-mode 1))
 (use-package dashboard :config (dashboard-setup-startup-hook))
 (use-package embark :bind ("M-o" . embark-act)) ; mx + mo
 (use-package embark-consult)
 (use-package org :config (setq org-hide-emphasis-markers t))
-(use-package emojify :hook (after-init . global-emojify-mode))
+; (use-package emojify :hook (after-init . global-emojify-mode))
 (use-package org-roam
   :custom
   (org-roam-directory "~/Dropbox/roam2/")
@@ -23,6 +32,7 @@
 	(concat "${title:*} "		; show filetags on org-roam-find-node
 		(propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-db-autosync-mode))
+
 (use-package orderless
   :ensure t
   :custom
@@ -41,12 +51,30 @@
 (global-set-key (kbd "C-c /") 'consult-line)
 (global-set-key (kbd "C-s") 'save-buffer)
 (global-set-key (kbd "C-c c") #'org-roam-dailies-capture-today)
-(global-set-key (kbd "C-c r") 'recentf-open-files)
+(global-set-key (kbd "C-x C-s") 'org-insert-subheading)
+(global-set-key (kbd "C-<tab>") 'switch-to-buffer)
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(global-set-key (kbd "C--") 'evil-window-decrease-width)
+(define-key evil-normal-state-map (kbd "C-=") 'evil-window-increase-width)
 
 ;; hooks
-(add-hook 'org-mode-hook 'org-indent-mode)
+(add-hook 'org-mode-hook 'org-indent-mode)   ; da heck does this hook do
 
-;; use-package (dont touch)
+;; adding powershell theme to eshell
+(use-package eshell :config (eshell-git-prompt-use-theme 'powerline))
+
+(defun AP-up-directory-in-minibuffer (path)
+  "Move up a directory in PATH without affecting the kill buffer."
+  (interactive "p")
+  (if (string-match-p "/." (minibuffer-contents))
+      (let ((end (point)))
+	    (re-search-backward "/.")
+	    (forward-char)
+	    (delete-region (point) end))))
+
+(global-set-key (kbd "C-6") 'up-directory)
+
+;; use-package (dont touch below this, new code goes above this line)
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
@@ -58,3 +86,20 @@
 (setq use-package-always-ensure t)
 
 ;; keep init clean delete anything that autogenerates below
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(completion-ignored-extensions
+	 '(".o" "~" ".bin" ".lbin" ".so" ".a" ".ln" ".blg" ".bbl" ".elc" ".lof" ".glo" ".idx" ".lot" ".svn/" ".hg/" ".git/" ".bzr/" "CVS/" "_darcs/" "_MTN/" ".fmt" ".tfm" ".class" ".fas" ".lib" ".mem" ".x86f" ".sparcf" ".dfsl" ".pfsl" ".d64fsl" ".p64fsl" ".lx64fsl" ".lx32fsl" ".dx64fsl" ".dx32fsl" ".fx64fsl" ".fx32fsl" ".sx64fsl" ".sx32fsl" ".wx64fsl" ".wx32fsl" ".fasl" ".ufsl" ".fsl" ".dxl" ".lo" ".la" ".gmo" ".mo" ".toc" ".aux" ".cp" ".fn" ".ky" ".pg" ".tp" ".vr" ".cps" ".fns" ".kys" ".pgs" ".tps" ".vrs" ".pyc" ".pyo"))
+ '(org-tags-exclude-from-inheritance nil)
+ '(package-selected-packages
+	 '(emmet-mode evil-surround flycheck git-gutter eshell-git-prompt web-mode lsp-mode anki-editor anki-connect org-drill expand-region vertico use-package popper org-roam orderless magit evil emojify embark-consult dashboard corfu auto-dim-other-buffers))
+ '(tab-width 2))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
