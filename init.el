@@ -72,7 +72,10 @@
 	    (forward-char)
 	    (delete-region (point) end))))
 
-(global-set-key (kbd "C-6") 'up-directory)
+(global-set-key (kbd "C-6") 'AP-up-directory-in-minibuffer)
+
+;; for dired moving files to other open window
+(setq dired-dwim-target t)
 
 ;; use-package (dont touch below this, new code goes above this line)
 (require 'package)
