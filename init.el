@@ -14,7 +14,8 @@
 
 ;; packages (stick to one line if possible)
 (use-package magit :config (setq magit-diff-refine-hunk (quote all)) (global-git-gutter-mode 1)) ; show git difference to a word level
-(use-package vertico :config (vertico-mode 1) (vertico-reverse-mode 1) (vertico-grid-mode 1))
+(use-package vertico :config (vertico-mode 1) (vertico-reverse-mode 1))
+(use-package marginalia :init (marginalia-mode))
 (use-package consult)
 (use-package popper :init (popper-mode) :bind ("C-`" . popper-toggle-latest))
 (use-package auto-dim-other-buffers :init (auto-dim-other-buffers-mode))
