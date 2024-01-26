@@ -18,7 +18,8 @@
 (use-package consult)
 (use-package popper :init (popper-mode) :bind ("C-`" . popper-toggle-latest))
 (use-package auto-dim-other-buffers :init (auto-dim-other-buffers-mode))
-(use-package evil :config (evil-mode 1) (evil-surround-mode 1))
+(use-package evil :config (evil-mode 1))
+(use-package evil-surround :config (global-evil-surround-mode 1))
 (use-package dashboard :config (dashboard-setup-startup-hook))
 (use-package embark :bind ("M-o" . embark-act)) ; mx + mo
 (use-package embark-consult)
