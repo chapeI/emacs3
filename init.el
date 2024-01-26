@@ -54,8 +54,8 @@
 (global-set-key (kbd "C-x C-s") 'org-insert-subheading)
 (global-set-key (kbd "C-<tab>") 'switch-to-buffer)
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-(global-set-key (kbd "C--") 'evil-window-decrease-width)
-(define-key evil-normal-state-map (kbd "C-=") 'evil-window-increase-width)
+(global-set-key (kbd "C--") (lambda () (interactive) (evil-window-decrease-width 5)))
+(define-key evil-normal-state-map (kbd "C-=") (lambda () (interactive) (evil-window-increase-width 6)))
 
 ;; hooks
 (add-hook 'org-mode-hook 'org-indent-mode)   ; da heck does this hook do
