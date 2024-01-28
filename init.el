@@ -22,8 +22,10 @@
 (use-package consult)
 (use-package popper :init (popper-mode) :bind ("C-`" . popper-toggle-latest))
 (use-package auto-dim-other-buffers :init (auto-dim-other-buffers-mode))
-(use-package evil :config (evil-mode 1))
+(use-package evil :init (setq evil-want-keybinding nil) :config (evil-mode 1))
+(use-package evil-collection :after evil :config (evil-collection-init))
 (use-package evil-surround :config (global-evil-surround-mode 1))
+(use-package which-key :config (which-key-mode 1))
 (use-package embark :bind ("M-o" . embark-act)) ; mx + mo
 (use-package embark-consult)
 (use-package org :config (setq org-hide-emphasis-markers t))
