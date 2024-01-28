@@ -4,6 +4,9 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 
+;; restore sessions, be more like tmux
+(setq desktop-path '("~/"))
+(desktop-save-mode 1)
 
 ;; numbered lines
 (global-display-line-numbers-mode t) (menu-bar--display-line-numbers-mode-visual)
