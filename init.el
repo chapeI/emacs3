@@ -32,6 +32,7 @@
 (use-package which-key :config (which-key-mode 1))
 (use-package embark :bind ("M-o" . embark-act)) ; mx + mo
 (use-package embark-consult)
+(use-package dired :ensure nil :custom ((dired-listing-switches "-agho --group-directories-first")))
 (use-package org :config (setq org-hide-emphasis-markers t))
 ; (use-package emojify :hook (after-init . global-emojify-mode))
 (use-package org-roam
@@ -67,6 +68,7 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "C--") (lambda () (interactive) (evil-window-decrease-width 5)))
 (define-key evil-normal-state-map (kbd "C-=") (lambda () (interactive) (evil-window-increase-width 6)))
+(global-set-key (kbd "C-s") 'er/expand-region)
 
 ;; hooks
 (add-hook 'org-mode-hook 'org-indent-mode)   ; can this be added in org config?
