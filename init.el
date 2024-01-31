@@ -1,8 +1,12 @@
 (setq-default echo-keystrokes 0.1)
 (setq visible-bell 1)
-(load-theme 'tsdh-light)
+(load-theme 'whiteboard)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+(winner-mode 1)
+
+; prots preview-files packages
+(setq dired-preview-delay 0.1)
 
 ;; restore sessions, be more like tmux
 (setq desktop-path '("~/"))
@@ -15,7 +19,7 @@
 (set-default 'truncate-lines t)
 (setq truncate-partial-width-windows nil)
 
-;; packages (stick to one line if possible)
+;; packages (trying to stick to one line)
 (use-package magit :config (setq magit-diff-refine-hunk (quote all)) (global-git-gutter-mode 1)) ; show git difference to a word level
 (use-package vertico :config (vertico-mode 1) (vertico-reverse-mode 1))
 (use-package marginalia :init (marginalia-mode))
@@ -32,7 +36,7 @@
 ; (use-package emojify :hook (after-init . global-emojify-mode))
 (use-package org-roam
   :custom
-  (org-roam-directory "~/Dropbox/roam2/")
+  (org-roam-directory "~/Dropbox/roam/")
   :config
   (setq org-roam-node-display-template
 	(concat "${title:*} "		; show filetags on org-roam-find-node
@@ -44,7 +48,9 @@
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
-(use-package corfu			; autocomplete
+
+; autocomplete
+(use-package corfu
   :after orderless
   :custom
   (corfu-quit-at-boundary nil)
@@ -55,16 +61,15 @@
 
 ;; global keybinds
 (global-set-key (kbd "C-c /") 'consult-line)
-(global-set-key (kbd "C-s") 'save-buffer)
+(global-set-key (kbd "C-x C-s") 'save-buffer)
 (global-set-key (kbd "C-c c") #'org-roam-dailies-capture-today)
-(global-set-key (kbd "C-x C-s") 'org-insert-subheading)
 (global-set-key (kbd "C-<tab>") 'switch-to-buffer)
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (global-set-key (kbd "C--") (lambda () (interactive) (evil-window-decrease-width 5)))
 (define-key evil-normal-state-map (kbd "C-=") (lambda () (interactive) (evil-window-increase-width 6)))
 
 ;; hooks
-(add-hook 'org-mode-hook 'org-indent-mode)   ; da heck does this hook do
+(add-hook 'org-mode-hook 'org-indent-mode)   ; can this be added in org config?
 
 ;; adding powershell theme to eshell
 (use-package eshell :config (eshell-git-prompt-use-theme 'powerline))
