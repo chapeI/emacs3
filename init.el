@@ -74,6 +74,19 @@
 (define-key evil-normal-state-map (kbd "C-=") (lambda () (interactive) (evil-window-increase-width 6)))
 (global-set-key (kbd "C-s") 'er/expand-region)
 
+;; switch-buffers in mx. instead of having to c-g and then c-tab, just c-tab in mx
+
+(defun ap/switch-buffers-in-mx ()
+  "c-tab in m-x, runs switch-to-buffer instead of runnning annoying file-cache-minibuffer-complete"
+  (interactive)
+  (insert "switch to buffer")
+	(run-with-timer 0.1 nil 'vertico-exit))
+
+(defun my-mx-hook ()
+  "binding my switch buffers in x to up key binding c-tab"
+  (local-set-key (kbd "<C-tab>") 'ap/switch-buffers-in-mx))
+
+(add-hook 'minibuffer-setup-hook 'my-mx-hook)
 
 ;; adding powershell theme to eshell
 (use-package eshell :config (eshell-git-prompt-use-theme 'powerline))
