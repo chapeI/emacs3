@@ -33,7 +33,11 @@
 (use-package embark :bind ("M-o" . embark-act)) ; mx + mo
 (use-package embark-consult)
 (use-package dired :ensure nil :custom ((dired-listing-switches "-agho --group-directories-first")))
-(use-package org :config (setq org-hide-emphasis-markers t))
+(use-package org
+	:config
+	(setq org-hide-emphasis-markers t)
+	(add-hook 'org-mode-hook 'org-indent-mode)
+	(setq org-agenda-files '("~/Dropbox/roam/daily")))
 ; (use-package emojify :hook (after-init . global-emojify-mode))
 (use-package org-roam
   :custom
@@ -70,8 +74,6 @@
 (define-key evil-normal-state-map (kbd "C-=") (lambda () (interactive) (evil-window-increase-width 6)))
 (global-set-key (kbd "C-s") 'er/expand-region)
 
-;; hooks
-(add-hook 'org-mode-hook 'org-indent-mode)   ; can this be added in org config?
 
 ;; adding powershell theme to eshell
 (use-package eshell :config (eshell-git-prompt-use-theme 'powerline))
