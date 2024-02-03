@@ -24,12 +24,12 @@
 (use-package vertico :config (vertico-mode 1) (vertico-reverse-mode 1))
 (use-package marginalia :init (marginalia-mode))
 (use-package consult)
-(use-package popper :init (popper-mode) :bind ("C-`" . popper-toggle-latest))
-(use-package auto-dim-other-buffers :init (auto-dim-other-buffers-mode))
+(use-package popper :init (popper-mode) (popper-echo-mode) :bind ("C-`" . popper-toggle-latest))
+(use-package auto-dim-other-buffers :init (auto-dim-other-buffers-mode))  ;; saw this in JAKE B's config :config (evil-set-initial-state 'pdf-view-mode 'motion)
 (use-package evil :init (setq evil-want-keybinding nil) :config (evil-mode 1))
 (use-package evil-collection :after evil :config (evil-collection-init))
 (use-package evil-surround :config (global-evil-surround-mode 1))
-(use-package which-key :config (which-key-mode 1))
+(use-package which-key :init (which-key-mode))
 (use-package embark :bind ("M-o" . embark-act)) ; mx + mo
 (use-package embark-consult)
 (use-package dired :ensure nil :custom ((dired-listing-switches "-agho --group-directories-first")))
@@ -38,7 +38,6 @@
 	(setq org-hide-emphasis-markers t)
 	(add-hook 'org-mode-hook 'org-indent-mode)
 	(setq org-agenda-files '("~/Dropbox/roam/daily")))
-; (use-package emojify :hook (after-init . global-emojify-mode))
 (use-package org-roam
   :custom
   (org-roam-directory "~/Dropbox/roam/")
@@ -47,6 +46,7 @@
 	(concat "${title:*} "		; show filetags on org-roam-find-node
 		(propertize "${tags:10}" 'face 'org-tag)))
   (org-roam-db-autosync-mode))
+; (use-package emojify :hook (after-init . global-emojify-mode))
 
 (use-package orderless
   :ensure t
