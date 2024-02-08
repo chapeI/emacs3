@@ -91,17 +91,6 @@
 ;; adding powershell theme to eshell
 (use-package eshell :config (eshell-git-prompt-use-theme 'powerline))
 
-(defun AP-up-directory-in-minibuffer (path)
-  "Move up a directory in PATH without affecting the kill buffer."
-  (interactive "p")
-  (if (string-match-p "/." (minibuffer-contents))
-      (let ((end (point)))
-	    (re-search-backward "/.")
-	    (forward-char)
-	    (delete-region (point) end))))
-
-(global-set-key (kbd "C-6") 'AP-up-directory-in-minibuffer)
-
 ;; for dired moving files to other open window
 (setq dired-dwim-target t)
 
