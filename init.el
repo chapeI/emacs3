@@ -1,100 +1,117 @@
+
+(load-theme 'leuven)
 (setq-default echo-keystrokes 0.1)
 (setq visible-bell 1)
-(load-theme 'whiteboard)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (winner-mode 1)
+(savehist-mode 1)   ; see recent mx commands
+(global-display-line-numbers-mode t) (menu-bar--display-line-numbers-mode-visual) ;; numbered lines
+(setq desktop-path '("~/")) (desktop-save-mode 1) ;; restore sessions, be more like tmux
+(set-default 'truncate-lines t) (setq truncate-partial-width-windows nil) ;; global truncating lines
+(setq dired-dwim-target t)
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-; prots preview-files packages
-(setq dired-preview-delay 0.1)
-
-;; restore sessions, be more like tmux
-(setq desktop-path '("~/"))
-(desktop-save-mode 1)
-
-;; numbered lines
-(global-display-line-numbers-mode t) (menu-bar--display-line-numbers-mode-visual)
-
-;; global truncating lines
-(set-default 'truncate-lines t)
-(setq truncate-partial-width-windows nil)
-
-;; packages (trying to stick to one line)
 (use-package magit :config (setq magit-diff-refine-hunk (quote all)) (global-git-gutter-mode 1)) ; show git difference to a word level
-(use-package vertico :config (vertico-mode 1) (vertico-reverse-mode 1))
 (use-package marginalia :init (marginalia-mode))
-(use-package consult)
-(use-package popper :init (popper-mode) (popper-echo-mode) :bind ("C-`" . popper-toggle-latest))
-(use-package auto-dim-other-buffers :init (auto-dim-other-buffers-mode))  ;; saw this in JAKE B's config :config (evil-set-initial-state 'pdf-view-mode 'motion)
-(use-package evil :init (setq evil-want-keybinding nil) :config (evil-mode 1))
+(use-package vertico
+	:init
+	(vertico-mode nil)
+	(vertico-multiform-mode 1)
+	:custom
+	;; Configure the display per command. ;; Use a buffer with indices for imenu ;; and a flat (Ido-like) menu for M-x.
+	(vertico-multiform-commands
+   '((consult-imenu buffer indexed)
+     (execute-extended-command unobtrusive)
+		 (switch-to-buffer unobtrusive)
+		 (consult-line buffer)
+		 ))
+
+	;; Configure the display per completion category. ;; Use the grid display for files and a buffer ;; for the consult-grep commands.
+	(vertico-multiform-categories
+				'((file grid)
+					(consult-grep buffer))))
+
+(use-package popper :init (popper-mode) (popper-echo-mode) :bind ("C-`" . popper-toggle-latest)
+	; popper-display-popup-at-bottom was changed
+	:config ; example of .. i forget, how popper plays nicely with display-alist?
+	(setq popper-reference-buffers
+				'(
+					"^\\*ielm\\*"
+					)
+	))
+
+;; corfu means autocomplete
+(use-package corfu :init (global-corfu-mode) :custom (corfu-auto t))
+(defun corfu-move-to-minibuffer ()
+  (interactive)
+  (pcase completion-in-region--data
+    (`(,beg ,end ,table ,pred ,extras)
+     (let ((completion-extra-properties extras)
+           completion-cycle-threshold completion-cycling)
+       (consult-completion-in-region beg end table pred)))))
+(keymap-set corfu-map "<tab>" #'corfu-move-to-minibuffer)
+(add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)
+
+(use-package auto-dim-other-buffers :init (auto-dim-other-buffers-mode))  ;; JAKE B :config (evil-set-initial-state 'pdf-view-mode 'motion)
+(use-package evil
+	:init
+	(setq evil-want-keybinding nil)
+	:config
+	(evil-mode 1)
+	(global-set-key (kbd "C--") (lambda () (interactive) (evil-window-decrease-width 5)))
+	(define-key evil-normal-state-map (kbd "C-=") (lambda () (interactive) (evil-window-increase-width 6))))
 (use-package evil-collection :after evil :config (evil-collection-init))
 (use-package evil-surround :config (global-evil-surround-mode 1))
 (use-package which-key :init (which-key-mode))
-(use-package embark :bind ("M-o" . embark-act)) ; mx + mo
+(use-package embark :bind ("M-o" . embark-act)) ; mxmo
 (use-package embark-consult)
 (use-package dired :ensure nil :custom ((dired-listing-switches "-agho --group-directories-first")))
+
+(use-package consult
+	:bind
+	("C-s" . consult-line)
+	("C-<tab>" . consult-buffer-other-window)
+	:config
+	(recentf-mode 1))
+
 (use-package org
 	:config
 	(setq org-hide-emphasis-markers t)
 	(add-hook 'org-mode-hook 'org-indent-mode)
 	(setq org-agenda-files '("~/Dropbox/roam/daily")))
+
 (use-package org-roam
   :custom
   (org-roam-directory "~/Dropbox/roam/")
   :config
   (setq org-roam-node-display-template
-	(concat "${title:*} "		; show filetags on org-roam-find-node
-		(propertize "${tags:10}" 'face 'org-tag)))
-  (org-roam-db-autosync-mode))
-; (use-package emojify :hook (after-init . global-emojify-mode))
-
+				(concat "${title:*} "		; show filetags on org-roam-find-node
+								(propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+	:bind
+	("C-c c" . org-roam-dailies-capture-today))
+																				; (use-package emojify :hook (after-init . global-emojify-mode))
 (use-package orderless
-  :ensure t
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
-; autocomplete
-(use-package corfu
-  :after orderless
-  :custom
-  (corfu-quit-at-boundary nil)
-  (corfu-quit-no-match t)
-  (corfu-cycle t)
-  (corfu-auto t)
-  :init (global-corfu-mode))
+(use-package eshell :config (eshell-git-prompt-use-theme 'powerline))
+(use-package dired-preview :custom (dired-preview-delay 0.1))
+(use-package mode-line-bell :config (mode-line-bell-mode 1))
 
-;; global keybinds
-(global-set-key (kbd "C-c /") 'consult-line)
-(global-set-key (kbd "C-x C-s") 'save-buffer)
-(global-set-key (kbd "C-c c") #'org-roam-dailies-capture-today)
-(global-set-key (kbd "C-<tab>") 'switch-to-buffer)
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-(global-set-key (kbd "C--") (lambda () (interactive) (evil-window-decrease-width 5)))
-(define-key evil-normal-state-map (kbd "C-=") (lambda () (interactive) (evil-window-increase-width 6)))
-(global-set-key (kbd "C-s") 'er/expand-region)
-
-;; switch-buffers in mx. instead of having to c-g and then c-tab, just c-tab in mx
-
-(defun ap/switch-buffers-in-mx ()
-  "c-tab in m-x, runs switch-to-buffer instead of runnning annoying file-cache-minibuffer-complete"
+;; AP ELISP
+(defun ap/switch-buffers-from-mx-if-mx-was-accidently-clicked ()
+  "c-tab in m-x, runs <switch-to-buffer> instead of <file-cache-minibuffer-complete>"
   (interactive)
   (insert "switch to buffer")
 	(run-with-timer 0.1 nil 'vertico-exit))
-
 (defun my-mx-hook ()
-  "binding my switch buffers in x to up key binding c-tab"
-  (local-set-key (kbd "<C-tab>") 'ap/switch-buffers-in-mx))
-
+  (local-set-key (kbd "<C-tab>") 'ap/switch-buffers-from-mx-if-mx-was-accidently-clicked))
 (add-hook 'minibuffer-setup-hook 'my-mx-hook)
 
-;; adding powershell theme to eshell
-(use-package eshell :config (eshell-git-prompt-use-theme 'powerline))
-
-;; for dired moving files to other open window
-(setq dired-dwim-target t)
-
-;; use-package (dont touch below this, new code goes above this line)
+;; use-package (DONT TOUCH BELOW THIS, ANY NEW CODE GOES ABOVE THIS)
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
