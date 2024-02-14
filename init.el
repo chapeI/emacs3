@@ -100,6 +100,11 @@
 (use-package eshell :config (eshell-git-prompt-use-theme 'powerline))
 (use-package dired-preview :custom (dired-preview-delay 0.1))
 (use-package mode-line-bell :config (mode-line-bell-mode 1))
+(use-package projectile
+  :init
+  (projectile-mode +1)
+  :bind (:map projectile-mode-map
+              ("C-c p" . projectile-command-map)))
 
 ;; AP ELISP
 (defun ap/switch-buffers-from-mx-if-mx-was-accidently-clicked ()
