@@ -18,19 +18,27 @@
 	:init
 	(vertico-mode nil)
 	(vertico-multiform-mode 1)
+
+	;; mx in vertico changes to unobstrusive in the following code,
+	;; toggle obstrusive <-> normal w m-V
+	;; note: ANOOP manually changed vertico-multiform-map in vertico-multiform.el
+	;; (defvar-keymap vertico-multiform-map
+	;;   "M-V" #'vertico-multiform-vertical ;; anoop manually changed TO "M-v"
+	;;   "M-U" #'vertico-multiform-unobtrusive)
+
 	:custom
 	;; Configure the display per command. ;; Use a buffer with indices for imenu ;; and a flat (Ido-like) menu for M-x.
 	(vertico-multiform-commands
-   '((consult-imenu buffer indexed)
-     (execute-extended-command unobtrusive)
-		 (switch-to-buffer unobtrusive)
-		 (consult-line buffer)
-		 ))
+	 '((consult-imenu buffer indexed)
+	   (execute-extended-command unobtrusive)
+	   (switch-to-buffer unobtrusive)
+	   (consult-line buffer)
+	   ))
 
 	;; Configure the display per completion category. ;; Use the grid display for files and a buffer ;; for the consult-grep commands.
 	(vertico-multiform-categories
-				'((file grid)
-					(consult-grep buffer))))
+	 '((file grid)
+	   (consult-grep buffer))))
 
 (use-package popper :init (popper-mode) (popper-echo-mode) :bind ("C-`" . popper-toggle-latest)
 	; popper-display-popup-at-bottom was changed
