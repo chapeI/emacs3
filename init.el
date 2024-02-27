@@ -1,3 +1,5 @@
+; (load "~/.config/emacs/dbg")
+(load "~/.config/emacs/prot")
 
 (load-theme 'leuven)
 (setq-default echo-keystrokes 0.1)
