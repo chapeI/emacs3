@@ -7,15 +7,19 @@
 								;; (:eval (format " %s " "TEST" ))
 								;; (:eval (format " %s " (propertize "TEST" 'face 'warning) ))
 								;; (:eval (format " %s " (lsp-connected-p)))
-								(:eval (format " %s " (propertize (lsp-connected-p) 'face 'diff-error)))
-																				; anoop edit end
+								(:eval (format " %s " (propertize (lsp-connected-p) 'face 'diff-error))) ; anoop edits end. rest should be default
                 (:propertize
-                 ("" mode-line-mule-info mode-line-client mode-line-modified
-                  mode-line-remote)
+                 ("" mode-line-mule-info mode-line-client mode-line-modified mode-line-remote)
                  display (min-width (5.0)))
-                mode-line-frame-identification mode-line-buffer-identification "   "
-                mode-line-position (vc-mode vc-mode) "  " mode-line-modes
-                mode-line-misc-info mode-line-end-spaces))
+                mode-line-frame-identification
+								mode-line-buffer-identification
+								"   "
+                mode-line-position
+								(vc-mode vc-mode)
+								"  "
+								mode-line-modes
+                mode-line-misc-info
+								mode-line-end-spaces))
 
 ;; chatgpt
 (defun lsp-connected-p ()
