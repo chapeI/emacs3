@@ -11,6 +11,8 @@
 (set-default 'truncate-lines t) (setq truncate-partial-width-windows nil) ;; global truncating lines
 (setq dired-dwim-target t)
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(setopt use-short-answers t)
+
 
 (use-package magit :config (setq magit-diff-refine-hunk (quote all)) (global-git-gutter-mode 1)) ; show git difference to a word level
 (use-package marginalia :init (marginalia-mode))
