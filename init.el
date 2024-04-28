@@ -1,5 +1,26 @@
-; (load "~/.config/emacs/dbg")
-(load "~/.config/emacs/prot")
+(load "~/.config/emacs/anoops_headerline")
+
+(set-face-attribute 'default nil :height 120)  ; zoom
+
+;; keybind shortcut reference
+(defun anoops-shortcut ()
+	(interactive)
+	(message "hey antoine set your session specific shortcut here")
+	)
+(global-set-key (kbd "C-c C-a") 'anoops-shortcut)
+
+(use-package doom-modeline
+	:init
+	(doom-modeline-mode 1))
+
+(defun toggle-doom-modeline ()
+  "Toggle the Doom modeline."
+  (interactive)
+  (if (bound-and-true-p doom-modeline-mode)
+      (doom-modeline-mode -1)
+    (doom-modeline-mode 1)))
+
+(global-set-key (kbd "C-c C-d") 'toggle-doom-modeline)
 
 (load-theme 'leuven)
 (setq-default echo-keystrokes 0.1)
@@ -15,17 +36,16 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (setopt use-short-answers t)
 
-
 (use-package magit :config (setq magit-diff-refine-hunk (quote all)) (global-git-gutter-mode 1)) ; show git difference to a word level
 (use-package marginalia :init (marginalia-mode))
-(use-package vertico
+(use-package vertico   ; minibuffer fuzzy matching
 	:init
 	(vertico-mode nil)
 	(vertico-multiform-mode 1)
 
 	;; mx in vertico changes to unobstrusive in the following code,
 	;; toggle obstrusive <-> normal w m-V
-	;; note: ANOOP manually changed vertico-multiform-map in vertico-multiform.el
+	;; note: vertico-multiform-map in vertico-multiform.el was manually changed by ANOOP
 	;; (defvar-keymap vertico-multiform-map
 	;;   "M-V" #'vertico-multiform-vertical ;; anoop manually changed TO "M-v"
 	;;   "M-U" #'vertico-multiform-unobtrusive)
@@ -34,7 +54,7 @@
 	;; Configure the display per command. ;; Use a buffer with indices for imenu ;; and a flat (Ido-like) menu for M-x.
 	(vertico-multiform-commands
 	 '((consult-imenu buffer indexed)
-	   (execute-extended-command unobtrusive)
+	   ;; (execute-extended-command unobtrusive)
 	   (switch-to-buffer unobtrusive)
 	   (consult-line buffer)
 	   ))
@@ -82,10 +102,15 @@
 
 (use-package consult
 	:bind
-	("C-s" . consult-line)
+	("C-c l" . consult-line)
 	("C-<tab>" . consult-buffer-other-window)
+	("C-c b" . consult-buffer)
 	:config
 	(recentf-mode 1))
+; how to add this to use-package consult 
+(advice-add #'project-find-regexp :override #'consult-ripgrep)
+
+; (use-package consult-project-extra)  ;; if i can ripgrep, unmute
 
 (use-package org
 	:config
@@ -112,11 +137,15 @@
 (use-package eshell :config (eshell-git-prompt-use-theme 'powerline))
 (use-package dired-preview :custom (dired-preview-delay 0.1))
 (use-package mode-line-bell :config (mode-line-bell-mode 1))
-(use-package projectile
-  :init
-  (projectile-mode +1)
-  :bind (:map projectile-mode-map
-              ("C-c p" . projectile-command-map)))
+;; (use-package projectile
+;;   :init
+;;   (projectile-mode +1)
+;; 	:config
+;; 	(setq projectile-globally-ignored-files
+;; 				(append '("*.md") projectile-globally-ignored-files))
+;;   :bind (:map projectile-mode-map
+;;               ("C-c p" . projectile-command-map)))
+;; (use-package consult-projectile)
 
 ;; AP ELISP
 (defun ap/switch-buffers-from-mx-if-mx-was-accidently-clicked ()
@@ -139,7 +168,7 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;; keep init clean delete anything that autogenerates below
+;; ;; keep init clean delete anything that autogenerates below
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -147,9 +176,13 @@
  ;; If there is more than one, they won't work right.
  '(completion-ignored-extensions
 	 '(".o" "~" ".bin" ".lbin" ".so" ".a" ".ln" ".blg" ".bbl" ".elc" ".lof" ".glo" ".idx" ".lot" ".svn/" ".hg/" ".git/" ".bzr/" "CVS/" "_darcs/" "_MTN/" ".fmt" ".tfm" ".class" ".fas" ".lib" ".mem" ".x86f" ".sparcf" ".dfsl" ".pfsl" ".d64fsl" ".p64fsl" ".lx64fsl" ".lx32fsl" ".dx64fsl" ".dx32fsl" ".fx64fsl" ".fx32fsl" ".sx64fsl" ".sx32fsl" ".wx64fsl" ".wx32fsl" ".fasl" ".ufsl" ".fsl" ".dxl" ".lo" ".la" ".gmo" ".mo" ".toc" ".aux" ".cp" ".fn" ".ky" ".pg" ".tp" ".vr" ".cps" ".fns" ".kys" ".pgs" ".tps" ".vrs" ".pyc" ".pyo"))
+ '(custom-safe-themes
+	 '("aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8" default))
+ '(lsp-headerline-breadcrumb-enable nil)
  '(org-tags-exclude-from-inheritance nil)
  '(package-selected-packages
-	 '(emmet-mode evil-surround flycheck git-gutter eshell-git-prompt web-mode lsp-mode anki-editor anki-connect org-drill expand-region vertico use-package popper org-roam orderless magit evil emojify embark-consult dashboard corfu auto-dim-other-buffers))
+	 '(doom-themes doom-modeline diminish corfu mode-line-bell rg projectile shackle dired-preview evil-collection marginalia which-key evil-surround flycheck git-gutter eshell-git-prompt web-mode lsp-mode anki-editor anki-connect org-drill vertico use-package popper org-roam orderless magit evil emojify embark-consult auto-dim-other-buffers))
+ '(popper-mode t)
  '(tab-width 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
